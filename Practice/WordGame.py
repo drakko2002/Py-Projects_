@@ -77,6 +77,8 @@ def set_example():
         except ValueError:
             print("Valor inserido é inválido.")
             continue
+        except SystemExit:
+            print("Saída de sistema requisitada pelo usuário. Finalizandol.")
 set_example()
 #Todo: Melhorar fluxo do código.
 #Todo: Adicionar funcionalidade que compare desempenho dos dois jogadores.
