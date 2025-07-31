@@ -1,15 +1,11 @@
 def adicionar_tarefa(tarefas, nome_tarefa):
     tarefa = {"tarefa": nome_tarefa, "completada": False}
-    #Basicamente, o dicionário conter a chave "completada" = False nos possibilita
-    #já inserir a tarefa incompleta de forma dinamica
-    # e para completá-la, nós tao somente precisamos declará-la como variável e inserir a chave atualizada.
+#Basicamente, o dicionário conter a chave "completada" = False nos possibilita
+#já inserir a tarefa incompleta de forma dinamica
+# e para completá-la, nós tao somente precisamos declará-la como variável e inserir a chave atualizada.
     tarefas.append(tarefa)
     print(f"Tarefa '{nome_tarefa}' foi adicionada com sucesso.")
     return
-
-
-#tarefas = [] 
-#abrindo agora uma lista vazia fora da funçao adicionar_tarefa.
 
 
 def visualiza_tarefa(tarefas):
@@ -109,7 +105,11 @@ while True:
                     print("Selecionou deletar tarefas completadas!")
                     deletar_completadas(tarefas)
                 #O bloco try/except serve bem ao propósito.
-        except (ValueError, IndexError):
+        except (ValueError, IndexError) as e:
             print("O valor digitado está incorreto ou é inválido!")
+            print(f"Erro: {e}")
             continue
 
+#Todo: Acoplar com banco de dados em Postgree ou MySql
+#Todo: Fazer uma espécie de todolist que possa ser utilizada com o SpendFlow para garantir
+#progresso dinamico do aplicativo.
