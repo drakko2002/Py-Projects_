@@ -177,9 +177,10 @@ def menu_agenda():
         print("1 - Adicionar um contato.")
         print("2 - Visualizar agenda.")
         print("3 - Buscar contato.")
-        print("4 - Editar contato.")
-        print("5 - Excluir contato.")
-        print("6 - Sair.")
+        print("4 - Favoritar um contato.")
+        print("5 - Editar contato.")
+        print("6 - Excluir contato.")
+        print("0 - Sair.")
         try:
             opcao = int(input("Digite a opção desejada: "))
             match opcao:
@@ -191,11 +192,15 @@ def menu_agenda():
                     adicionar_contato(nome, sobrenome, email, telefone)
                 case 2:
                     exibir_contato(contatos=[contato])
-                case 6:
+                #case 3:
+                    
+                #case 4:
+                    
+                case 5:
+                    editar_contato(contato)
+                case 10:
                     print("Saindo da agenda.")
                     raise SystemExit("Programa finalizado.")
-                case 4:
-                    editar_contato(contato)
                 case _:
                     print("Opção inválida.")
         except ValueError:
