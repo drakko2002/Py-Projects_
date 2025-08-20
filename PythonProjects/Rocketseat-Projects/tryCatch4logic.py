@@ -90,34 +90,44 @@ def editar_contato(contato: dict):
     match editar:
         case 1:
             nome = capturar_dados("Digite seu nome: ")
-#            if nome_novo not in {contato['Nome']}:
-#                print("O valor informado nao está na agenda.")
+            # Verifica se o nome já existe na agenda
+            # Se existir, atualiza o nome, caso contrário, informa que não está na agenda
             if nome in {contato['Nome']}:
-                print("O valor informado está na agenda.")
+                print("O valor informado está na agenda!")
                 nome_novo = capturar_dados("Digite o novo nome: ")
                 contato.update({'Nome': nome_novo})
+                print("Nome atualizado com sucesso!")
+            else: #Se o nome não estiver na agenda, informa ao usuário.
+                print("O valor informado nao está na agenda.")
+                return
         case 2:
-            if not sobrenome:
-                sobrenome = capturar_dados("Digite seu sobrenome: ")
-                if sobrenome not in contato:
-                    print("O valor informado nao está na agenda.")
-            if sobrenome in contato:
-                contato.update(sobrenome)
+            sobrenome = capturar_dados("Digite seu sobrenome: ")
+            if sobrenome in {contato['Sobrenome']}:
+                print("O valor informado está na agenda.")
+                sobrenome_novo = capturar_dados("Digite o novo sobrenome: ")
+                contato.update({'Sobrenome': sobrenome_novo})
+                print("Sobrenome atualizado com sucesso!")
+            else: # Se o sobrenome não estiver na agenda, informa ao usuário.
+                print("O valor informado nao está na agenda.")
+                return
         case 3:
-            if not email:
                 email = capturar_dados("Digite seu email: ")
-                if email not in contato:
+                if email in {contato['Email']}:
+                    print("O valor informado está na agenda.")
+                    email_novo = capturar_dados("Digite o novo email: ")
+                    contato.update({'Email': email_novo})
+                    print("Email atualizado com sucesso!")
+                else: #Se o email não estiver na agenda, informa ao usuário.
                     print("O valor informado nao está na agenda.")
-            if email in contato:
-                contato.update(email)
-        case 4:
-            if not telefone:
-                telefone = capturar_dados("Digite seu telefone: ")
-                if telefone not in contato:
-                    print("O valor informado nao está na agenda.")
-            if telefone in contato:
-                contato.update(telefone)
+                    return
 
+        case 4:
+                telefone = capturar_dados("Digite seu telefone: ")
+                if telefone in [contato['Telefone']]:
+                    print("O valor informado está na agenda.")
+                    telefone_novo = capturar_dados("Digite o novo telefone: ")
+                    contato.update({'Telefone': telefone_novo})
+                    print("Telefone atualizado com sucesso!")
 
 def menu_agenda():
     print("--:) Menu da Agenda (:--")
