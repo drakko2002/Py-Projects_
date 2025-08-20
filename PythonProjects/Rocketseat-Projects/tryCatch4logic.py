@@ -44,10 +44,6 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
 #            }
 
     try: 
-        #nome = capturar_dados("Digite seu nome: ")
-        #sobrenome = capturar_dados("Digite seu sobrenome: ")
-        #email = capturar_dados("Digite seu e-mail: ")
-        #telefone = capturar_dados("Digite seu telefone: ")
         print("Insira as informações do contato: \n")
 
         if not nome:
@@ -111,23 +107,24 @@ def editar_contato(contato: dict):
                 print("O valor informado nao está na agenda.")
                 return
         case 3:
-                email = capturar_dados("Digite seu email: ")
-                if email in {contato['Email']}:
-                    print("O valor informado está na agenda.")
-                    email_novo = capturar_dados("Digite o novo email: ")
-                    contato.update({'Email': email_novo})
-                    print("Email atualizado com sucesso!")
-                else: #Se o email não estiver na agenda, informa ao usuário.
-                    print("O valor informado nao está na agenda.")
-                    return
+            email = capturar_dados("Digite seu email: ")
+            if email in {contato['Email']}:
+                print("O valor informado está na agenda.")
+                email_novo = capturar_dados("Digite o novo email: ")
+                contato.update({'Email': email_novo})
+                print("Email atualizado com sucesso!")
+            else: #Se o email não estiver na agenda, informa ao usuário.
+                print("O valor informado nao está na agenda.")
+                return
 
         case 4:
-                telefone = capturar_dados("Digite seu telefone: ")
-                if telefone in [contato['Telefone']]:
-                    print("O valor informado está na agenda.")
-                    telefone_novo = capturar_dados("Digite o novo telefone: ")
-                    contato.update({'Telefone': telefone_novo})
-                    print("Telefone atualizado com sucesso!")
+            telefone = capturar_dados("Digite seu telefone: ")
+            if telefone in [contato['Telefone']]:
+                print("O valor informado está na agenda.")
+                telefone_novo = capturar_dados("Digite o novo telefone: ")
+                contato.update({'Telefone': telefone_novo})
+                print("Telefone atualizado com sucesso!")
+
 
 def menu_agenda():
     print("--:) Menu da Agenda (:--")
