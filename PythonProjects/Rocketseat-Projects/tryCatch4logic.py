@@ -1,3 +1,7 @@
+import re
+
+
+
 contato: dict = {
     "Nome": "",
     "Sobrenome": "",
@@ -17,6 +21,7 @@ def capturar_dados(prompt: str) -> str:
         except KeyboardInterrupt: 
             raise SystemExit("Usuário finalizou o programa.") 
         print("Entrada inválida. Por favor, tente novamente.")
+        
 
 
 def exibir_contato(contatos: list):
@@ -35,14 +40,7 @@ def exibir_contato(contatos: list):
 
 def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", telefone: str = "", favorito: bool = False):
     """Adiciona um contato à agenda."""
-#    contato = {
-#        "Nome": nome.strip(),
-#        "Sobrenome": sobrenome.strip(),
-#        "Email": email.strip(),
-#        "Telefone": telefone.strip(),
-#        "Favorito": favorito
-#            }
-
+    global contato
     try: 
         print("Insira as informações do contato: \n")
 
@@ -66,6 +64,19 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
         exibir_contato([contato])
     except KeyboardInterrupt as e:
         raise SystemExit("Usuário finalizou o programa.") from e
+
+
+def normalizar_telefone(telefone: str) -> str:
+    """Normaliza o número de telefone removendo caracteres não numéricos."""
+    return re.sub(r'\D', '', telefone)
+
+
+def normalizar_email(email: str) -> str:
+    """Normaliza o email convertendo para minúsculas."""
+    email = email.lower().strip()
+    if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+        raise ValueError("Email inválido. Deve conter '@' e um domínio.")
+    return email
 
 
 def editar_contato(contato: dict):
@@ -109,8 +120,10 @@ def editar_contato(contato: dict):
         case 3:
             email = capturar_dados("Digite seu email: ")
             if email in {contato['Email']}:
+                email = normalizar_email(email)
                 print("O valor informado está na agenda.")
                 email_novo = capturar_dados("Digite o novo email: ")
+                email_novo = normalizar_email(email_novo)
                 contato.update({'Email': email_novo})
                 print("Email atualizado com sucesso!")
             else: #Se o email não estiver na agenda, informa ao usuário.
@@ -119,11 +132,22 @@ def editar_contato(contato: dict):
 
         case 4:
             telefone = capturar_dados("Digite seu telefone: ")
-            if telefone in [contato['Telefone']]:
+            # Normaliza o telefone para comparação
+            telefone_normalizado = normalizar_telefone(telefone)
+            if telefone_normalizado == normalizar_telefone(contato['Telefone']):
+                # Verifica se o telefone já existe na agenda
                 print("O valor informado está na agenda.")
                 telefone_novo = capturar_dados("Digite o novo telefone: ")
-                contato.update({'Telefone': telefone_novo})
+                #Normaliza o novo telefone inserido para manter a consistência
+                if not re.match(r'^\d{10,15}$', telefone_novo):
+                    print("Telefone inválido. Deve conter apenas números e ter entre 10 a 15 dígitos.")
+                    return
+                telefone_novo_normalizado = normalizar_telefone(telefone_novo)
+                contato.update({'Telefone': telefone_novo_normalizado})
                 print("Telefone atualizado com sucesso!")
+            else: #Se o telefone não estiver na agenda, informa ao usuário.
+                print("O valor informado nao está na agenda.")
+                return
 
 
 def menu_agenda():
