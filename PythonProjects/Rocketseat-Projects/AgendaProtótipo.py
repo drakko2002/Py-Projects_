@@ -1,14 +1,14 @@
 import re
 
 
-
-contato: dict = {
-    "Nome": "",
-    "Sobrenome": "",
-    "Email": "",
-    "Telefone": "",
-    "Favorito": False
-}
+contatos = []
+#contato: dict = {
+#    "Nome": "",
+#    "Sobrenome": "",
+#    "Email": "",
+#    "Telefone": "",
+#    "Favorito": False
+#}
 
 
 def capturar_dados(prompt: str) -> str:
@@ -22,7 +22,6 @@ def capturar_dados(prompt: str) -> str:
             raise SystemExit("Usuário finalizou o programa.") 
         print("Entrada de dados inválida. Por favor, tente novamente.")
         
-
 
 def exibir_contato(contatos: list):
     """Exibe as informações dos contatos."""
@@ -38,10 +37,20 @@ def exibir_contato(contatos: list):
         print("-" * 20)
 
 
-def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", telefone: str = "", favorito: bool = False):
+def adicionar_contato():
     """Adiciona um contato à agenda."""
-    global contato
+    contato: dict = {
+        "Nome": "",
+        "Sobrenome": "",
+        "Email": "",
+        "Telefone": "",
+        "Favorito": False
+    }
     print("Insira as informações do contato: \n")
+    nome = capturar_dados("Digite o nome: ")
+    sobrenome = capturar_dados("Digite o sobrenome: ")
+    email = capturar_dados("Digite o email: ")
+    telefone = capturar_dados("Digite o telefone: ")
     try: #Bloco de validaçao
         if email: #Se tiver sido inserido um email, tenta normalizar.
             email_valido = False
@@ -52,6 +61,8 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
                     email_normalizado = normalizar_email(email)
                     email_valido = email_normalizado
                     if email_valido:
+                        break
+                    else:
                         break
                     
                 except Exception as e:
@@ -64,8 +75,10 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
                 try:
                     telefone_normalizado = normalizar_telefone(telefone)
                     telefone_valido = telefone_normalizado
-                    if telefone_normalizado == True:
-                        return
+                    if telefone_normalizado:
+                        break
+                    else:
+                        break
                 except Exception as f:
                     print(f"Telefone inserido é inválido: {f}")
                     continue
@@ -77,18 +90,20 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
             "Telefone": telefone_normalizado,
             "Favorito": False
         })
+        contatos.append(contato)
         print("Contato adicionado com sucesso!")
-        exibir_contato([contato])
+        exibir_contato(contatos)
     except KeyboardInterrupt as e:
         raise SystemExit("Usuário finalizou o programa.") from e
 
 
 def normalizar_telefone(telefone: str) -> str:
     """Normaliza o número de telefone removendo caracteres não numéricos."""
-    if len(telefone) < 8:
-        print("O número de telefone inserido é inválido.")
-    else:
-        return re.sub(r'\D', '', telefone)
+    if not re.match(r'^\d{8,15}$', telefone):
+        print("O telefone inserido é inválido.")
+        raise ValueError("Telefone inválido.")
+    return telefone
+        
 
 
 
@@ -96,16 +111,18 @@ def normalizar_email(email: str) -> str:
     """Normaliza o email convertendo para minúsculas."""
     email = email.lower().strip()
     if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
-        raise ValueError("Email inválido. Deve conter '@' e um domínio.")
+        print("Email inválido. Deve conter '@' e um domínio.")
+        raise ValueError("Email inválido.")
     return email
+    
 
 
 def editar_contato(contato: dict):
-    print(f"Prévia dos dados: {contato}")
-    nome = contato.get("Nome", "")
-    sobrenome = contato.get("Sobrenome", "")
-    email = contato.get("Email", "")
-    telefone = contato.get("Telefone", "")
+    print(f"Prévia dos dados: {contatos}")
+    nome = contatos.get("Nome", "")
+    sobrenome = contatos.get("Sobrenome", "")
+    email = contatos.get("Email", "")
+    telefone = contatos.get("Telefone", "")
     print("Selecione qual dado deseja editar!")
     print("1 - Nome; ")
     print("2 - Sobrenome; ")
@@ -120,10 +137,10 @@ def editar_contato(contato: dict):
             nome = capturar_dados("Digite seu nome: ")
             # Verifica se o nome já existe na agenda
             # Se existir, atualiza o nome, caso contrário, informa que não está na agenda
-            if nome in {contato['Nome']}:
+            if nome in contatos:
                 print("O valor informado está na agenda!")
                 nome_novo = capturar_dados("Digite o novo nome: ")
-                contato.update({'Nome': nome_novo})
+                contatos.update({'Nome': nome_novo})
                 print("Nome atualizado com sucesso!")
             else: #Se o nome não estiver na agenda, informa ao usuário.
                 print("O valor informado nao está na agenda.")
@@ -160,8 +177,8 @@ def editar_contato(contato: dict):
                 print("O valor informado está na agenda.")
                 telefone_novo = capturar_dados("Digite o novo telefone: ")
                 #Normaliza o novo telefone inserido para manter a consistência
-                if not re.match(r'^\d{10,15}$', telefone_novo):
-                    print("Telefone inválido. Deve conter apenas números e ter entre 10 a 15 dígitos.")
+                if not re.match(r'^\d{8,15}$', telefone_novo):
+                    print("Telefone inválido. Deve conter apenas números e ter entre 8 a 15 dígitos.")
                     return
                 telefone_novo_normalizado = normalizar_telefone(telefone_novo)
                 contato.update({'Telefone': telefone_novo_normalizado})
@@ -178,26 +195,27 @@ def menu_agenda():
         print("2 - Visualizar agenda.")
         print("3 - Buscar contato.")
         print("4 - Favoritar um contato.")
-        print("5 - Editar contato.")
-        print("6 - Excluir contato.")
+        print("5 - Listar Favoritos")
+        print("6 - Editar contato.")
+        print("7 - Excluir contato.")
         print("0 - Sair.")
         try:
             opcao = int(input("Digite a opção desejada: "))
             match opcao:
                 case 1:
-                    nome = capturar_dados("Digite o nome: ")
-                    sobrenome = capturar_dados("Digite o sobrenome: ")
-                    email = capturar_dados("Digite o email: ")
-                    telefone = capturar_dados("Digite o telefone: ")
-                    adicionar_contato(nome, sobrenome, email, telefone)
+                    adicionar_contato()
                 case 2:
-                    exibir_contato(contatos=[contato])
+                    exibir_contato(contatos)
                 #case 3:
                     
                 #case 4:
+                
+                #case 5:
                     
-                case 5:
-                    editar_contato(contato)
+                case 6:
+                    editar_contato(contatos)
+                #case 6:
+                    
                 case 10:
                     print("Saindo da agenda.")
                     raise SystemExit("Programa finalizado.")
@@ -211,3 +229,6 @@ def menu_agenda():
 
 
 menu_agenda()
+
+#Todo: Verificar o porque está pedindo duas vezes email e telefone. // Done
+#Estava pedindo duas vezes os parametros de usuário em duas funçoes diferentes.
