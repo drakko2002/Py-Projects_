@@ -89,12 +89,13 @@ def editar_contato(contato: dict):
         return
     match editar:
         case 1:
-            if not nome:
-                nome = capturar_dados("Digite seu nome: ")
-                if nome not in contato:
-                    print("O valor informado nao está na agenda.")
-            if nome in contato:
-                contato.update(nome)
+            nome = capturar_dados("Digite seu nome: ")
+#            if nome_novo not in {contato['Nome']}:
+#                print("O valor informado nao está na agenda.")
+            if nome in {contato['Nome']}:
+                print("O valor informado está na agenda.")
+                nome_novo = capturar_dados("Digite o novo nome: ")
+                contato.update({'Nome': nome_novo})
         case 2:
             if not sobrenome:
                 sobrenome = capturar_dados("Digite seu sobrenome: ")
