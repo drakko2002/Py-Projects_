@@ -44,15 +44,15 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
     print("Insira as informações do contato: \n")
     try: #Bloco de validaçao
         if email: #Se tiver sido inserido um email, tenta normalizar.
-            email_valido = None
+            email_valido = False
             
             while not email_valido:
                 email = capturar_dados("Insira um e-mail válido: ")
                 try:
                     email_normalizado = normalizar_email(email)
                     email_valido = email_normalizado
-                    if email_valido == True:
-                        return
+                    if email_valido:
+                        break
                     
                 except Exception as e:
                     print(f"Erro inesperado: {e}")
@@ -85,7 +85,11 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
 
 def normalizar_telefone(telefone: str) -> str:
     """Normaliza o número de telefone removendo caracteres não numéricos."""
-    return re.sub(r'\D', '', telefone)
+    if len(telefone) < 8:
+        print("O número de telefone inserido é inválido.")
+    else:
+        return re.sub(r'\D', '', telefone)
+
 
 
 def normalizar_email(email: str) -> str:
