@@ -42,7 +42,7 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
     """Adiciona um contato à agenda."""
     global contato
     print("Insira as informações do contato: \n")
-    try: 
+    try: #Bloco de validaçao
         if email: #Se tiver sido inserido um email, tenta normalizar.
             email_valido = None
             
@@ -50,22 +50,31 @@ def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", tele
                 email = capturar_dados("Insira um e-mail válido: ")
                 try:
                     email_normalizado = normalizar_email(email)
-                    email_valido == email_normalizado
+                    email_valido = email_normalizado
                     if email_valido == True:
                         return
                     
                 except Exception as e:
                     print(f"Erro inesperado: {e}")
                     continue
-        if not telefone:
-            telefone = capturar_dados("Digite seu telefone: ")
-            telefone_normalizado = normalizar_telefone(telefone)
+        if telefone: #Se tiver sido inserido um telefone.
+            telefone_valido = None
+            while not telefone_valido:
+                telefone = capturar_dados("Digite um telefone válido: ")
+                try:
+                    telefone_normalizado = normalizar_telefone(telefone)
+                    telefone_valido = telefone_normalizado
+                    if telefone_normalizado == True:
+                        return
+                except Exception as f:
+                    print(f"Telefone inserido é inválido: {f}")
+                    continue
             
         contato.update({
             "Nome": nome,
             "Sobrenome": sobrenome,
             "Email": email_normalizado,
-            "Telefone": telefone,
+            "Telefone": telefone_normalizado,
             "Favorito": False
         })
         print("Contato adicionado com sucesso!")
