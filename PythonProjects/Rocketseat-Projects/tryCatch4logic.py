@@ -20,7 +20,7 @@ def capturar_dados(prompt: str) -> str:
                 return valor 
         except KeyboardInterrupt: 
             raise SystemExit("Usuário finalizou o programa.") 
-        print("Entrada inválida. Por favor, tente novamente.")
+        print("Entrada de dados inválida. Por favor, tente novamente.")
         
 
 
@@ -41,22 +41,30 @@ def exibir_contato(contatos: list):
 def adicionar_contato(nome: str = "", sobrenome: str = "", email: str = "", telefone: str = "", favorito: bool = False):
     """Adiciona um contato à agenda."""
     global contato
+    print("Insira as informações do contato: \n")
     try: 
-        print("Insira as informações do contato: \n")
-
-        if not nome:
-            nome = capturar_dados("Digite seu nome: ")
-        if not sobrenome:
-            sobrenome = capturar_dados("Digite seu sobrenome: ") 
-        if not email:
-            email = capturar_dados("Digite seu email: ")
-
+        if email: #Se tiver sido inserido um email, tenta normalizar.
+            email_valido = None
+            
+            while not email_valido:
+                email = capturar_dados("Insira um e-mail válido: ")
+                try:
+                    email_normalizado = normalizar_email(email)
+                    email_valido == email_normalizado
+                    if email_valido == True:
+                        return
+                    
+                except Exception as e:
+                    print(f"Erro inesperado: {e}")
+                    continue
         if not telefone:
             telefone = capturar_dados("Digite seu telefone: ")
+            telefone_normalizado = normalizar_telefone(telefone)
+            
         contato.update({
             "Nome": nome,
             "Sobrenome": sobrenome,
-            "Email": email,
+            "Email": email_normalizado,
             "Telefone": telefone,
             "Favorito": False
         })
@@ -74,7 +82,7 @@ def normalizar_telefone(telefone: str) -> str:
 def normalizar_email(email: str) -> str:
     """Normaliza o email convertendo para minúsculas."""
     email = email.lower().strip()
-    if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
+    if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
         raise ValueError("Email inválido. Deve conter '@' e um domínio.")
     return email
 
