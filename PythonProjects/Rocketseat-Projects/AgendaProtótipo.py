@@ -26,7 +26,7 @@ def capturar_dados(prompt: str) -> str:
 def exibir_contato(contatos: list):
     """Exibe as informações dos contatos."""
     print("\nInformações fornecidas:")
-    if not contatos:
+    if not contatos: #Aqui, reforçamos a ideia do inverso lógico, onde enfatizamos que a lista está vazia.
         print("Nenhum contato cadastrado.")
     for contato in contatos:
         print(f"Nome: {contato}")
@@ -44,54 +44,52 @@ def adicionar_contato():
     print("Insira as informações do contato: \n")
     nome = capturar_dados("Digite o nome: ")
     sobrenome = capturar_dados("Digite o sobrenome: ")
-    email = capturar_dados("Digite o email: ")
-    telefone = capturar_dados("Digite o telefone: ")
-    try: #Bloco de validaçao
-        if email: #Se tiver sido inserido um email, tenta normalizar.
-            email_valido = False
-                
-            while not email_valido:
-                #email = capturar_dados("Insira um e-mail válido: ")
-                try:
-                    #email = capturar_dados("Insira um e-mail válido: ")
-                    email_normalizado = normalizar_email(email)
-                    email_valido = email_normalizado
-                    if email_valido:
-                        break
-                    else:
-                        break
-                    
-                except Exception as e:
-                    print(f"Erro inesperado: {e}")
-                    continue
-        if telefone: #Se tiver sido inserido um telefone.
-            telefone_valido = None
-            while not telefone_valido:
-                #telefone = capturar_dados("Digite um telefone válido: ")
-                try:
-                    #telefone = capturar_dados("Digite um telefone válido: ")
-                    telefone_normalizado = normalizar_telefone(telefone)
-                    telefone_valido = telefone_normalizado
-                    if telefone_valido:
-                        break
-                    else:
-                        break
-                except Exception as f:
-                    print(f"Telefone inserido é inválido: {f}")
-                    continue
-            
-        contato.update({
-            "Nome": nome,
-            "Sobrenome": sobrenome,
-            "Email": email_normalizado,
-            "Telefone": telefone_normalizado,
-            "Favorito": False
-        })
-        contatos.append(contato)
-        print("Contato adicionado com sucesso!")
-        exibir_contato(contatos)
-    except KeyboardInterrupt as e:
-        raise SystemExit("Usuário finalizou o programa.") from e
+    #Bloco de validaçao
+    email_valido = False
+
+    while not email_valido:
+        email = capturar_dados("Digite o e-mail: ")
+
+        if not email:
+            print("Digite um e-mail válido.")
+            continue   # volta para o início do loop
+        try:
+            email_normalizado = normalizar_email(email)
+            email_valido = True   # passou na validação
+        except Exception as e:
+            print(f"Digite um e-mail válido. Erro: {e}")
+            if not email:
+                email = capturar_dados("Digite um e-mail válido: ")
+                continue  # volta para o início do loop
+
+    telefone_valido = False
+
+    while not telefone_valido:
+        telefone = capturar_dados("Digite um telefone: ")
+
+        if not telefone:
+            print("Digite um telefone válido.")
+            continue
+
+        try:
+            telefone_normalizado = normalizar_telefone(telefone)
+            telefone_valido = True
+            #if telefone_valido == True:
+            #    break
+        except Exception as e:
+            print(f"Digite um telefone válido. Erro: {e}")
+            continue
+
+    contato.update({
+        "Nome": nome,
+        "Sobrenome": sobrenome,
+        "Email": email_normalizado,
+        "Telefone": telefone_normalizado,
+        "Favorito": False
+    })
+    contatos.append(contato)
+    print("Contato adicionado com sucesso!")
+    exibir_contato(contatos)
 
 
 def normalizar_telefone(telefone: str) -> str:
@@ -105,10 +103,12 @@ def normalizar_telefone(telefone: str) -> str:
 def normalizar_email(email: str) -> str:
     """Normaliza o email convertendo para minúsculas."""
     email = email.lower().strip()
-    if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
-        print("Email inválido. Deve conter '@' e um domínio.")
+    if re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
+        return email
+    if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
         raise ValueError("Email inválido.")
-    return email
+
+
 
 
 def busca_contato():
@@ -126,33 +126,42 @@ def busca_contato():
             for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
                 if c['Nome'] == busca_nome: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
                     contato = c #Salva o contato obtido dentro de uma variável
-                    print(f"Contato encontrado: {contato}")
+                    print(f"Valor encontrado: {contato['Nome']}")
+                    print(f"No dicionário: {contato}")
         case 2:
             busca_sobrenome = str(input("Digite o sobrenome: "))
             for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
                 if c['Sobrenome'] == busca_sobrenome: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
                     contato = c #Salva o contato obtido dentro de uma variável
-                    print(f"Contato encontrado: {contato}")
+                    print(f"Valor encontrado: {contato['Sobrenome']}")
+                    print(f"No dicionário: {contato}")
         case 3:
             busca_email = str(input("Digite o e-mail para buscar: "))
             for c in contatos:  #Iterando pela lista de dicionários utilizando pseudonimo "c"
                 if c['Email'] == busca_email: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
                     contato = c #Salva o contato obtido dentro de uma variável
-                    print(f"Contado encontrado: {contato}\n")
+                    print(f"Valor encontrado: {contato['Email']}\n")
+                    print(f"No dicionário: {contato}\n")
         case 4:
             busca_telefone = str(input("Digite o telefone: "))
             for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
                 if c['Telefone'] == busca_telefone: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
                     contato = c #Salva o contato obtido dentro de uma variável
-                    print(f"Contato encontrado: {contato}")
+                    print(f"Valor encontrado: {contato['Telefone']}")
+                    print(f"No dicionário: {contato}")
 
 def editar_contato():
-    busca_email = (input("Digite um e-mail para buscar: "))
-    normalizar_email(busca_email)
-    for contato in contatos: 
-        if busca_email in contato:
-            print(f"Contato encontrado: {contato}\n")
-            return contato
+    identificador = (input("Digite um e-mail para buscar: "))
+    normalizar_email(identificador)
+    for c in contatos: 
+        if c['Email'] == identificador:
+            contato = c
+            print(f"Dados do contato: \n")
+            print(f"Nome: {contato['Nome']}")
+            print(f"Sobrenome: {contato['Sobrenome']}")
+            print(f"Email: {contato['Email']}")
+            print(f"Telefone: {contato['Telefone']}")
+            #return contato
         else:
             print("O contato nao foi encontrado!")
             
@@ -175,14 +184,16 @@ def editar_contato():
                 nome = capturar_dados("Digite seu nome: ")
                 # Verifica se o nome já existe na agenda
                 # Se existir, atualiza o nome, caso contrário, informa que não está na agenda
-                if nome in contatos[c]:
-                    print("O valor informado está na agenda!")
-                    nome_novo = capturar_dados("Digite o novo nome: ")
-                    contatos.nome[c]
-                    print("Nome atualizado com sucesso!")
-                else: #Se o nome não estiver na agenda, informa ao usuário.
-                    print("O valor informado nao está na agenda.")
-                    return
+                for c in contatos:
+                    if c['Nome'] == nome:
+                        print("O valor informado está na agenda!")
+                        contato = c
+                        nome_novo = capturar_dados("Digite o novo nome: ")
+                        
+                        print("Nome atualizado com sucesso!")
+                    else: #Se o nome não estiver na agenda, informa ao usuário.
+                        print("O valor informado nao está na agenda.")
+                        return
             case 2:
                 sobrenome = capturar_dados("Digite seu sobrenome: ")
                 if sobrenome in {contato['Sobrenome']}:
