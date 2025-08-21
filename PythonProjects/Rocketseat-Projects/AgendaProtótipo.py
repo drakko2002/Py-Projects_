@@ -94,9 +94,10 @@ def adicionar_contato():
 
 def normalizar_telefone(telefone: str) -> str:
     """Normaliza o número de telefone removendo caracteres não numéricos."""
+    telefone = re.sub(r'\D', '', telefone)
     if not re.match(r'^\d{8,15}$', telefone):
         print("O telefone inserido é inválido.")
-        raise ValueError("Telefone inválido.")
+        raise ValueError("Telefone deve ter entre 8 e 15 carácteres.")
     return telefone
 
 
@@ -274,8 +275,3 @@ def menu_agenda():
 
 
 menu_agenda()
-
-#Todo: Verificar o porque está pedindo duas vezes email e telefone. // Done
-#Estava pedindo duas vezes os parametros de usuário em duas funçoes diferentes.
-
-#Todo: Adaptar funçao editar() para atender aos novos parametros
