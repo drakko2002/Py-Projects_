@@ -151,6 +151,8 @@ def busca_contato():
                     print(f"No dicionário: {contato}")
 
 def editar_contato():
+    #Usando conceitos de banco de dados, utilizamos um identificador para ser
+    #a chave primária de cada chave de dicionário dentro da lista.
     identificador = (input("Digite um e-mail para buscar: "))
     normalizar_email(identificador)
     for c in contatos: 
@@ -161,11 +163,8 @@ def editar_contato():
             print(f"Sobrenome: {contato['Sobrenome']}")
             print(f"Email: {contato['Email']}")
             print(f"Telefone: {contato['Telefone']}")
-            #return contato
         else:
             print("O contato nao foi encontrado!")
-            
-#Testar aqui pra ver se está conseguindo acessar o index
 
 #A intençao aqui é acessar os indexes e edita-los a partir do e-mail como chave identificadora do contato.
 
@@ -181,56 +180,52 @@ def editar_contato():
             return
         match editar:
             case 1:
-                nome = capturar_dados("Digite seu nome: ")
-                # Verifica se o nome já existe na agenda
                 # Se existir, atualiza o nome, caso contrário, informa que não está na agenda
-                for c in contatos:
-                    if c['Nome'] == nome:
-                        print("O valor informado está na agenda!")
-                        contato = c
-                        nome_novo = capturar_dados("Digite o novo nome: ")
-                        
-                        print("Nome atualizado com sucesso!")
-                    else: #Se o nome não estiver na agenda, informa ao usuário.
-                        print("O valor informado nao está na agenda.")
-                        return
+                if c['Email'] == identificador: #Aqui, vinculamos o e-mail à um conceito de chave primária
+                    print(f"Editando {c['Nome']}")
+                    nome_novo = capturar_dados("Digite o novo nome: ")
+                    contato.update({'Nome': nome_novo})
+                    print(f"Dados do contato de e-mail: {c['Email']} atualizados.")
+                    print(f"Nome atualizado: {contato['Nome']}")
+                    return
+                else: #Se o nome não estiver na agenda, informa ao usuário.
+                    print("O valor informado nao está na agenda.")
+                    return
             case 2:
-                sobrenome = capturar_dados("Digite seu sobrenome: ")
-                if sobrenome in {contato['Sobrenome']}:
-                    print("O valor informado está na agenda.")
+                if c['Email'] == identificador:
+                    print(f"Editando {c['Sobrenome']}")
                     sobrenome_novo = capturar_dados("Digite o novo sobrenome: ")
                     contato.update({'Sobrenome': sobrenome_novo})
-                    print("Sobrenome atualizado com sucesso!")
+                    print(f"Dados do contato de e-mail: {c['Email']} atualizados com sucesso.")
+                    print(f"Sobrenome atualizado: {contato['Sobrenome']}")
                 else: # Se o sobrenome não estiver na agenda, informa ao usuário.
                     print("O valor informado nao está na agenda.")
                     return
             case 3:
-                email = capturar_dados("Digite seu email: ")
-                if email in {contato['Email']}:
-                    email = normalizar_email(email)
-                    print("O valor informado está na agenda.")
+                if c['Email'] == identificador:
+                    print(f"Editando {c['Email']}")
                     email_novo = capturar_dados("Digite o novo email: ")
                     email_novo = normalizar_email(email_novo)
                     contato.update({'Email': email_novo})
-                    print("Email atualizado com sucesso!")
+                    print(f"Email atualizado: {contato['Email']}")
                 else: #Se o email não estiver na agenda, informa ao usuário.
                     print("O valor informado nao está na agenda.")
                     return
 
             case 4:
-                telefone = capturar_dados("Digite seu telefone: ")
+                #telefone = capturar_dados("Digite seu telefone: ")
                 # Normaliza o telefone para comparação
-                telefone_normalizado = normalizar_telefone(telefone)
-                if telefone_normalizado == normalizar_telefone(contato['Telefone']):
+                #telefone = normalizar_telefone(telefone)
+                if c['Telefone'] == telefone:
                     # Verifica se o telefone já existe na agenda
-                    print("O valor informado está na agenda.")
+                    print(f"Editando {c['Telefone']}")
                     telefone_novo = capturar_dados("Digite o novo telefone: ")
                     #Normaliza o novo telefone inserido para manter a consistência
                     if not re.match(r'^\d{8,15}$', telefone_novo):
                         print("Telefone inválido. Deve conter apenas números e ter entre 8 a 15 dígitos.")
                         return
-                    telefone_novo_normalizado = normalizar_telefone(telefone_novo)
-                    contato.update({'Telefone': telefone_novo_normalizado})
+                    telefone_novo = normalizar_telefone(telefone_novo)
+                    contato.update({'Telefone': telefone_novo})
                     print("Telefone atualizado com sucesso!")
                 else: #Se o telefone não estiver na agenda, informa ao usuário.
                     print("O valor informado nao está na agenda.")
