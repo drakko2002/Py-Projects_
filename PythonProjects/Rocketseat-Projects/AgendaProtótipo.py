@@ -100,8 +100,6 @@ def normalizar_telefone(telefone: str) -> str:
         print("O telefone inserido é inválido.")
         raise ValueError("Telefone inválido.")
     return telefone
-        
-#Está pedindo duas vezes o telefone.
 
 
 def normalizar_email(email: str) -> str:
@@ -112,7 +110,7 @@ def normalizar_email(email: str) -> str:
         raise ValueError("Email inválido.")
     return email
 
-#Está pedindo duas vezes o email, mesmo estando válido.
+
 def busca_contato():
     print("-- Funçao de busca --")
     print("")
@@ -121,26 +119,31 @@ def busca_contato():
     print("3 - E-mail")
     print("4 - Telefone")
     busca = int(input("Qual informaçao deseja buscar: "))
+    #busca_contato = str(input("Digite a informaçao para buscar: "))
     match busca:
         case 1:
             busca_nome = str(input("Digite o nome: "))
-            for contato in contatos:
-                if busca_nome in contatos:
+            for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
+                if c['Nome'] == busca_nome: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
+                    contato = c #Salva o contato obtido dentro de uma variável
                     print(f"Contato encontrado: {contato}")
         case 2:
             busca_sobrenome = str(input("Digite o sobrenome: "))
-            for contato in contatos:
-                if busca_sobrenome in contatos:
+            for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
+                if c['Sobrenome'] == busca_sobrenome: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
+                    contato = c #Salva o contato obtido dentro de uma variável
                     print(f"Contato encontrado: {contato}")
         case 3:
             busca_email = str(input("Digite o e-mail para buscar: "))
-            for contato in contatos: 
-                if busca_email in contato:
+            for c in contatos:  #Iterando pela lista de dicionários utilizando pseudonimo "c"
+                if c['Email'] == busca_email: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
+                    contato = c #Salva o contato obtido dentro de uma variável
                     print(f"Contado encontrado: {contato}\n")
         case 4:
             busca_telefone = str(input("Digite o telefone: "))
-            for contato in contatos:
-                if busca_telefone in contato:
+            for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
+                if c['Telefone'] == busca_telefone: #Compara a chave ['x'] de cada dicionário da lista com aquela inserida
+                    contato = c #Salva o contato obtido dentro de uma variável
                     print(f"Contato encontrado: {contato}")
 
 def editar_contato():
