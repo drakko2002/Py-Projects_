@@ -28,13 +28,12 @@ def exibir_contato(contatos: list):
     print("\nInformações fornecidas:")
     if not contatos:
         print("Nenhum contato cadastrado.")
-    for contato in contatos:
-        print(f"Nome: {contato['Nome']}")
-        print(f"Sobrenome: {contato['Sobrenome']}")
-        print(f"Email: {contato['Email']}")
-        print(f"Telefone: {contato['Telefone']}")
-        print(f"Favorito: {'Sim' if contato['Favorito'] else 'Não'}")
-        print("-" * 20)
+    for nome,email in contatos:
+        print(f"Nome: {nome['Nome']}")
+        print(f"Sobrenome: {email['Sobrenome']}")
+        #print(f"Email: {contato['Email']}")
+        #print(f"Telefone: {contato['Telefone']}")
+        #print(f"Favorito: {'Sim' if contato['Favorito'] else 'Não'}")
 
 
 def adicionar_contato():
@@ -75,7 +74,7 @@ def adicionar_contato():
                 try:
                     telefone_normalizado = normalizar_telefone(telefone)
                     telefone_valido = telefone_normalizado
-                    if telefone_normalizado:
+                    if telefone_valido:
                         break
                     else:
                         break
@@ -104,7 +103,7 @@ def normalizar_telefone(telefone: str) -> str:
         raise ValueError("Telefone inválido.")
     return telefone
         
-
+#Está pedindo duas vezes o telefone.
 
 
 def normalizar_email(email: str) -> str:
@@ -114,15 +113,17 @@ def normalizar_email(email: str) -> str:
         print("Email inválido. Deve conter '@' e um domínio.")
         raise ValueError("Email inválido.")
     return email
-    
+#Está pedindo duas vezes o email, mesmo estando válido.
 
 
-def editar_contato(contato: dict):
-    print(f"Prévia dos dados: {contatos}")
-    nome = contatos.get("Nome", "")
-    sobrenome = contatos.get("Sobrenome", "")
-    email = contatos.get("Email", "")
-    telefone = contatos.get("Telefone", "")
+def editar_contato():
+    for nome,email in contatos: 
+        print(f"Nome: {nome}\n")
+        print(f"Email: {email}\n")
+#Testar aqui pra ver se está conseguindo acessar o index
+
+#A intençao aqui é acessar os indexes e edita-los a partir do e-mail como chave identificadora do contato.
+
     print("Selecione qual dado deseja editar!")
     print("1 - Nome; ")
     print("2 - Sobrenome; ")
@@ -137,10 +138,10 @@ def editar_contato(contato: dict):
             nome = capturar_dados("Digite seu nome: ")
             # Verifica se o nome já existe na agenda
             # Se existir, atualiza o nome, caso contrário, informa que não está na agenda
-            if nome in contatos:
+            if nome in contatos[c]:
                 print("O valor informado está na agenda!")
                 nome_novo = capturar_dados("Digite o novo nome: ")
-                contatos.update({'Nome': nome_novo})
+                contatos.nome[c]
                 print("Nome atualizado com sucesso!")
             else: #Se o nome não estiver na agenda, informa ao usuário.
                 print("O valor informado nao está na agenda.")
@@ -213,7 +214,7 @@ def menu_agenda():
                 #case 5:
                     
                 case 6:
-                    editar_contato(contatos)
+                    editar_contato()
                 #case 6:
                     
                 case 10:
@@ -232,3 +233,5 @@ menu_agenda()
 
 #Todo: Verificar o porque está pedindo duas vezes email e telefone. // Done
 #Estava pedindo duas vezes os parametros de usuário em duas funçoes diferentes.
+
+#Todo: Adaptar funçao editar() para atender aos novos parametros
