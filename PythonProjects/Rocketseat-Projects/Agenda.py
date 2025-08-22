@@ -328,3 +328,11 @@ def menu_agenda():
 
 
 menu_agenda()
+
+#Tratar duplicatas: impedir que contatos com o mesmo email sejam adicionados.
+
+#Melhorar feedback: avisar o usuário quando a busca não encontra nada.
+
+#Validar inputs de forma consistente: encapsular em funções auxiliares (validar_email, validar_telefone) em vez de duplicar lógica.
+
+#Pensar em persistência simples: antes de banco de dados, já dá para salvar e carregar os contatos em JSON para treinar o fluxo de entrada/saída de dados.
