@@ -10,6 +10,8 @@ def formata_contato(contato):
         print(f"Sobrenome: {contato['Sobrenome']}")
         print(f"Email: {contato['Email']}")
         print(f"Telefone: {contato['Telefone']}")
+        if contato['Favorito'] == True:
+            print("♥♥♥♥♥♥♥♥ Favorito ♥♥♥♥♥♥♥♥")
         
 
 def capturar_dados(prompt: str) -> str:
@@ -151,21 +153,35 @@ def busca_contato():
                     print(f"Valor encontrado: {contato['Telefone']}")
                     print(f"No dicionário: {contato}")
 
+
 def favoritar():
     identificador = str(input("Digite um e-mail da agenda para favoritar: "))
     normalizar_email(identificador)
-    for c in contatos:
-        if c['Email'] == identificador:
-            contato = c
-            formata_contato(contato)
-        favoritar_ = str(input("Deseja favoritar S ou N: "))
-        if favoritar_ == 'S' or 's':
-            print(f"O E-mail {c['Email']} foi favoritado.")
-            contato.update({'Favorito': True})
-        if favoritar_ == 'N' or 'n':
-            break
-        if not contatos or contato:
-            print("A agenda está vazia ou o e-mail digitado nao existe.")
+    for contato in contatos:
+        
+        if contato['Email'] == identificador:
+            print(f"Dados do contato: \n")
+            print(f"Nome: {contato['Nome']}")
+            print(f"Sobrenome: {contato['Sobrenome']}")
+            print(f"Email: {contato['Email']}")
+            print(f"Telefone: {contato['Telefone']}")
+    print("Digite 0 para sair.")
+    print("Digite 1 para favoritar contato.")
+    print("Digite 2 para desfavoritar contato.")        
+    favoritar_ = str(input("Escolha: "))
+    if favoritar_ == '1':
+        print(f"O E-mail {contato['Email']} foi favoritado.")
+        contato.update({'Favorito': True})
+        return  #Finaliza após uma interaçao com o e-mail inserido.
+    if favoritar_ == '2':
+        print(f"O E-mail {contato['Email']} foi desfavoritado.")
+        contato.update({'Favorito':False})
+        return
+    if favoritar == '0':
+        return
+    if not contatos or contato:
+        print("A agenda está vazia ou o e-mail digitado nao existe.")
+        return
             
             
 def lista_favorito():
@@ -272,6 +288,7 @@ def excluir_contato():
                 break
             print("Lista de contatos atualizada!")
             exibir_contato()
+            return
         
 def menu_agenda():
     print("--:) Menu da Agenda (:--")
@@ -293,19 +310,14 @@ def menu_agenda():
                     exibir_contato(contatos)
                 case 3:
                     busca_contato()
-                    
                 case 4:
                     favoritar()
-                
                 case 5:
                     lista_favorito()
-                    
                 case 6:
                     editar_contato()
-                    
                 case 7:
                     excluir_contato()
-                
                 case 0:
                     print("Saindo da agenda.")
                     raise SystemExit("Programa finalizado.")
