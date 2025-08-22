@@ -255,7 +255,7 @@ def editar_contato():
                     print("O valor informado nao está na agenda.")
                     return
 
-def excluir_contato()
+def excluir_contato():
     print("Selecionou excluir contato!")
     identificador = str(input("Digite o e-mail do contato a ser excluído: "))
     normalizar_email(identificador)
@@ -267,6 +267,9 @@ def excluir_contato()
             escolha = str(input("S ou N: "))
             if escolha == 'S' or 's':
                 del c
+            if escolha == 'N' or 'n':
+                print("Operaçao cancelada!")
+                break
             print("Lista de contatos atualizada!")
             exibir_contato()
         
