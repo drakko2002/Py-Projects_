@@ -2,14 +2,15 @@ import re
 
 
 contatos = []
-#contato: dict = {
-#    "Nome": "",
-#    "Sobrenome": "",
-#    "Email": "",
-#    "Telefone": "",
-#    "Favorito": False
-#}
 
+def formata_contato(contato):
+    for contato in contatos:
+        print(f"-- Dados do contato --")
+        print(f"Nome: {contato['Nome']}")
+        print(f"Sobrenome: {contato['Sobrenome']}")
+        print(f"Email: {contato['Email']}")
+        print(f"Telefone: {contato['Telefone']}")
+        
 
 def capturar_dados(prompt: str) -> str:
     """Função auxiliar para capturar dados do usuário com validação."""
@@ -25,11 +26,9 @@ def capturar_dados(prompt: str) -> str:
 
 def exibir_contato(contatos: list):
     """Exibe as informações dos contatos."""
-    print("\nInformações fornecidas:")
     if not contatos: #Aqui, reforçamos a ideia do inverso lógico, onde enfatizamos que a lista está vazia.
         print("Nenhum contato cadastrado.")
-    for contato in contatos:
-        print(f"Nome: {contato}")
+    formata_contato(contatos)
 
 
 def adicionar_contato():
@@ -114,14 +113,15 @@ def normalizar_email(email: str) -> str:
 
 def busca_contato():
     print("-- Funçao de busca --")
-    print("")
+    print("0 - Sair")
     print("1 - Nome")
     print("2 - Sobrenome")
     print("3 - E-mail")
     print("4 - Telefone")
     busca = int(input("Qual informaçao deseja buscar: "))
-    #busca_contato = str(input("Digite a informaçao para buscar: "))
     match busca:
+        case 0:
+            return
         case 1:
             busca_nome = str(input("Digite o nome: "))
             for c in contatos: #Iterando pela lista de dicionários utilizando pseudonimo "c"
@@ -151,6 +151,31 @@ def busca_contato():
                     print(f"Valor encontrado: {contato['Telefone']}")
                     print(f"No dicionário: {contato}")
 
+def favoritar():
+    identificador = str(input("Digite um e-mail da agenda para favoritar: "))
+    normalizar_email(identificador)
+    for c in contatos:
+        if c['Email'] == identificador:
+            contato = c
+            formata_contato(contato)
+        favoritar_ = str(input("Deseja favoritar S ou N: "))
+        if favoritar_ == 'S' or 's':
+            print(f"O E-mail {c['Email']} foi favoritado.")
+            contato.update({'Favorito': True})
+        if favoritar_ == 'N' or 'n':
+            break
+        if not contatos or contato:
+            print("A agenda está vazia ou o e-mail digitado nao existe.")
+            
+            
+def lista_favorito():
+    for contato in contatos:
+        if contato['Favorito'] == True:
+            formata_contato(contato)
+        if not contatos:
+            print("Ainda nao há favoritos.")
+            
+    
 def editar_contato():
     #Usando conceitos de banco de dados, utilizamos um identificador para ser
     #a chave primária de cada chave de dicionário dentro da lista.
@@ -159,13 +184,10 @@ def editar_contato():
     for c in contatos: 
         if c['Email'] == identificador:
             contato = c
-            print(f"Dados do contato: \n")
-            print(f"Nome: {contato['Nome']}")
-            print(f"Sobrenome: {contato['Sobrenome']}")
-            print(f"Email: {contato['Email']}")
-            print(f"Telefone: {contato['Telefone']}")
-        else:
-            print("O contato nao foi encontrado!")
+            formata_contato(contato)
+    if c not in contatos:
+        print("O contato nao foi encontrado!")
+        return
 
 #A intençao aqui é acessar os indexes e edita-los a partir do e-mail como chave identificadora do contato.
 
@@ -192,6 +214,7 @@ def editar_contato():
                 else: #Se o nome não estiver na agenda, informa ao usuário.
                     print("O valor informado nao está na agenda.")
                     return
+            
             case 2:
                 if c['Email'] == identificador:
                     print(f"Editando {c['Sobrenome']}")
@@ -217,7 +240,7 @@ def editar_contato():
                 #telefone = capturar_dados("Digite seu telefone: ")
                 # Normaliza o telefone para comparação
                 #telefone = normalizar_telefone(telefone)
-                if c['Telefone'] == telefone:
+                if c['Email'] == identificador:
                     # Verifica se o telefone já existe na agenda
                     print(f"Editando {c['Telefone']}")
                     telefone_novo = capturar_dados("Digite o novo telefone: ")
@@ -232,7 +255,21 @@ def editar_contato():
                     print("O valor informado nao está na agenda.")
                     return
 
-
+def excluir_contato()
+    print("Selecionou excluir contato!")
+    identificador = str(input("Digite o e-mail do contato a ser excluído: "))
+    normalizar_email(identificador)
+    for c in contatos:
+        if c['Email'] == identificador:
+            contato = c
+            formata_contato(contato)
+            print("Deseja deletar o contato?")
+            escolha = str(input("S ou N: "))
+            if escolha == 'S' or 's':
+                del c
+            print("Lista de contatos atualizada!")
+            exibir_contato()
+        
 def menu_agenda():
     print("--:) Menu da Agenda (:--")
     while True:
@@ -254,15 +291,19 @@ def menu_agenda():
                 case 3:
                     busca_contato()
                     
-                #case 4:
+                case 4:
+                    favoritar()
                 
-                #case 5:
+                case 5:
+                    lista_favorito()
                     
                 case 6:
                     editar_contato()
-                #case 6:
                     
-                case 10:
+                case 7:
+                    excluir_contato()
+                
+                case 0:
                     print("Saindo da agenda.")
                     raise SystemExit("Programa finalizado.")
                 case _:
