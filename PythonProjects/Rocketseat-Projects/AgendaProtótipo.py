@@ -253,9 +253,6 @@ def editar_contato():
                     return
 
             case 4:
-                #telefone = capturar_dados("Digite seu telefone: ")
-                # Normaliza o telefone para comparação
-                #telefone = normalizar_telefone(telefone)
                 if c['Email'] == identificador:
                     # Verifica se o telefone já existe na agenda
                     print(f"Editando {c['Telefone']}")
