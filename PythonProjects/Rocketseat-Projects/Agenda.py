@@ -175,7 +175,7 @@ def favoritar():
         return  #Finaliza após uma interaçao com o e-mail inserido.
     if favoritar_ == '2':
         print(f"O E-mail {contato['Email']} foi desfavoritado.")
-        contato.update({'Favorito':False})
+        contato.update({'Favorito': False})
         return
     if favoritar == '0':
         return
